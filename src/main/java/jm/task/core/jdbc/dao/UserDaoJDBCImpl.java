@@ -22,9 +22,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
                 "  `lastName` VARCHAR(45) NULL,\n" +
                 "  `age` INT NULL,\n" +
                 "  PRIMARY KEY (`id`));\n")) {
-            connection1.setAutoCommit(false);
             statement.execute();
-            connection1.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,9 +32,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public void dropUsersTable() {
         try (Connection connection1 = establishConnection();
              PreparedStatement statement = connection1.prepareStatement("DROP TABLE IF EXISTS `test01`.`users`;")) {
-            connection1.setAutoCommit(false);
             statement.execute();
-            connection1.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,12 +41,10 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try (Connection connection1 = establishConnection();
              PreparedStatement statement = connection1.prepareStatement("INSERT INTO `test01`.`users` (name, lastName, age) VALUES(?, ?,?);")) {
-            connection1.setAutoCommit(false);
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setInt(3, (int) age);
             statement.execute();
-            connection1.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,10 +53,8 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public void removeUserById(long id) {
         try (Connection connection1 = establishConnection();
              PreparedStatement statement = connection1.prepareStatement("DELETE FROM `test01`.`users` as u WHERE id = ?;")) {
-            connection1.setAutoCommit(false);
             statement.setLong(1, id);
             statement.execute();
-            connection1.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,9 +65,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         List<User> listOfUsers = new ArrayList<>();
         try (Connection connection1 = establishConnection();
              PreparedStatement statement = connection1.prepareStatement("SELECT * FROM `test01`.`users`;")) {
-            connection1.setAutoCommit(false);
             resultSet = statement.executeQuery();
-            connection1.commit();
             while (resultSet.next()) {
                 listOfUsers.add(new User(resultSet.getLong("id"),
                         resultSet.getString("name"),
@@ -101,9 +91,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public void cleanUsersTable() {
         try (Connection connection1 = establishConnection();
              PreparedStatement statement = connection1.prepareStatement("TRUNCATE `test01`.`users`;")) {
-            connection1.setAutoCommit(false);
             statement.execute();
-            connection1.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
